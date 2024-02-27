@@ -63,11 +63,11 @@
 
   textInput.addEventListener("input", function() {
     const inputValue = textInput.value.trim().toLowerCase();
-    const isCorrect = inputValue === "yugoslavia";
+    const isCorrect = inputValue === "czechoslovakia";
     if (!isCorrect) {
       textInput.setCustomValidity("Incorrect");
     } else {
-      textInput.setCustomValidity("");
+      textInput.setCustomValidity("Correct");
     }
   });
 </script>
