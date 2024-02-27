@@ -1,8 +1,79 @@
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
-<title>Historidle - Daily game</title>
+
+​
+Evan Bray (Year 11)
+​
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+  <title>Historidle - Daily game</title>
+  <style>
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+      background-color: #333; /* Dark grey background */
+      color: #eee; /* Light text color */
+      font-family: 'Montserrat', sans-serif;
+    }
+
+    h1 {
+      color: #fff; /* White text color for headings */
+    }
+
+    .slider-container {
+      display: flex;
+      align-items: center;
+    }
+
+    .slider-value {
+      margin-left: 10px;
+    }
+  </style>
+</head>
+<body>
+
 <h1>Historidle</h1>
 <form>
-  <input type="text" id="inputcountry" name="guess">
-  <input type="range" min="-2000" max="2000" value="50" class="slider" id="myRange">
+  <input type="text" id="inputcountry" name="guess" required>
+  <div class="slider-container">
+    <input type="range" min="-2000" max="2000" value="50" class="slider" id="myRange">
+    <span class="slider-value" id="sliderValue">50</span>
+  </div>
   <button>Finalise guess</button>
 </form>
+
+<script>
+  const rangeInput = document.getElementById("myRange");
+  const sliderValue = document.getElementById("sliderValue");
+  const textInput = document.getElementById("inputcountry");
+
+  rangeInput.addEventListener("input", function() {
+    sliderValue.textContent = this.value;
+  });
+
+  sliderValue.addEventListener("input", function() {
+    let newValue = parseInt(this.textContent);
+    if (!isNaN(newValue)) {
+      rangeInput.value = newValue;
+    }
+  });
+
+  textInput.addEventListener("input", function() {
+    const inputValue = textInput.value.trim().toLowerCase();
+    const isCorrect = inputValue === "yugoslavia";
+    if (!isCorrect) {
+      textInput.setCustomValidity("Incorrect");
+    } else {
+      textInput.setCustomValidity("");
+    }
+  });
+</script>
+
+</body>
+</html>
