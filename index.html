@@ -13,8 +13,8 @@
       justify-content: center;
       height: 100vh;
       margin: 0;
-      background-color: #333; /* Dark grey background */
-      color: #eee; /* Light text color */
+      background-color: #333;
+      color: #eee;
       font-family: 'Montserrat', sans-serif;
     }
 
@@ -23,68 +23,150 @@
     }
 
     .slider-container {
-      display: flex;
+      display: none;
       align-items: center;
     }
 
     .slider-value {
       margin-left: 10px;
     }
-    
+
     img {
-  	border-radius: 10%;
-    margin-bottom: 0.25em;
-	}
-    
+      border-radius: 10%;
+      margin-bottom: 0.25em;
+      max-width: 100%;
+      height: auto;
+    }
+
     div {
-  	margin-bottom: 0.25em;
-	}
-    
+      margin-bottom: 0.25em;
+    }
+
     input {
-  	margin-bottom: 0.25em;
-	}
+      margin-bottom: 0.25em;
+    }
+
+    @media screen and (max-width: 600px) {
+      .slider-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .slider-value {
+        margin-left: 0;
+        margin-top: 5px;
+      }
+
+      input[type="range"] {
+        width: 90%;
+      }
+    }
+
+    button {
+      padding: 10px 20px;
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    input[type="range"] {
+      width: 80%;
+      -webkit-appearance: none;
+      appearance: none;
+      height: 10px;
+      background: #d3d3d3;
+      outline: none;
+      border-radius: 5px;
+      margin-right: 10px;
+    }
+
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 20px;
+      height: 20px;
+      background: #007bff;
+      border-radius: 50%;
+      cursor: pointer;
+    }
+
+    input[type="range"]::-moz-range-thumb {
+      width: 20px;
+      height: 20px;
+      background: #007bff;
+      border-radius: 50%;
+      cursor: pointer;
+    }
   </style>
 </head>
 <body>
 
 <h1>Historidle</h1>
 <img src="https://raw.githubusercontent.com/Historidle/Historidle.github.io/main/images/czechoslovakia.jpg" width="500" height="300", draggable="false" oncontextmenu="return false;">
-<form>
+<form id="guessForm">
   <input type="text" id="inputcountry" name="guess" required>
-  <div class="slider-container">
-    <input type="range" min="-2000" max="2000" value="50" class="slider" id="myRange">
-    <span class="slider-value" id="sliderValue">0</span>
+  <div class="slider-container" id="sliderContainer">
+    <input type="range" min="-2000" max="1993" value="50" class="slider" id="myRange">
+    <span class="slider-value" id="sliderValue">50</span>
   </div>
   <div class="guessesl">
-    <span class="guesses" id"guessesleft">3</span>
+    <span class="guesses" id="guessesLeft">3</span>
     <p>/3 guesses left</p>
   </div>
-  <button>Finalise guess</button>
+  <button id="submitButton" style="display:none;">Finalise guess</button>
 </form>
 
 <script>
+  let guessesLeft = 3;
+  
   const rangeInput = document.getElementById("myRange");
   const sliderValue = document.getElementById("sliderValue");
   const textInput = document.getElementById("inputcountry");
+  const sliderContainer = document.getElementById("sliderContainer");
+  const submitButton = document.getElementById("submitButton");
+  const guessForm = document.getElementById("guessForm");
+  const guessesLeftSpan = document.getElementById("guessesLeft");
+
+  textInput.addEventListener("input", function() {
+    validateInput();
+  });
 
   rangeInput.addEventListener("input", function() {
     sliderValue.textContent = this.value;
   });
 
-  sliderValue.addEventListener("input", function() {
-    let newValue = parseInt(this.textContent);
-    if (!isNaN(newValue)) {
-      rangeInput.value = newValue;
+  function validateInput() {
+    const inputValue = textInput.value.trim().toLowerCase();
+    const isCorrect = inputValue === "czechoslovakia";
+    if (isCorrect) {
+      textInput.setCustomValidity("");
+      showSlider();
+    } else {
+      textInput.setCustomValidity("Incorrect");
+      hideSlider();
     }
-  });
+  }
 
-  textInput.addEventListener("input", function() {
+  function showSlider() {
+    sliderContainer.style.display = "flex";
+    submitButton.style.display = "block";
+  }
+
+  function hideSlider() {
+    sliderContainer.style.display = "none";
+    submitButton.style.display = "none";
+  }
+
+  guessForm.addEventListener("submit", function(event) {
+    event.preventDefault();
     const inputValue = textInput.value.trim().toLowerCase();
     const isCorrect = inputValue === "czechoslovakia";
     if (!isCorrect) {
-      textInput.setCustomValidity("Incorrect");
-    } else {
-      textInput.setCustomValidity("Correct");
+      guessesLeft--;
+      guessesLeftSpan.textContent = guessesLeft;
     }
   });
 </script>
