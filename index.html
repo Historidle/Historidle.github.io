@@ -100,6 +100,19 @@
       border-radius: 50%;
       cursor: pointer;
     }
+   
+    /* Style for editable year input */
+    .editable-year {
+      border: none;
+      background: none;
+      color: inherit;
+      width: 40px; /* Adjust width as needed */
+      text-align: center;
+    }
+
+    .editable-year:focus {
+      outline: none;
+    }
   </style>
 </head>
 <body>
@@ -109,26 +122,23 @@
 <form id="guessForm">
   <input type="text" id="inputcountry" name="guess" required>
   <div class="slider-container" id="sliderContainer">
-    <input type="range" min="-2000" max="2000" value="50" class="slider" id="myRange">
-    <span class="slider-value" id="sliderValue">50</span>
-  </div>
-  <div class="guessesl">
-    <span class="guesses" id="guessesLeft">3</span>
-    <p>/3 guesses left</p>
+    <input type="range" min="-2000" max="1993" value="50" class="slider" id="myRange">
+    <input type="text" class="editable-year" value="1993">
   </div>
   <button id="submitButton" style="display:none;">Finalise guess</button>
+  <div id="timer">Time taken: <span id="timeDisplay">0:00</span></div>
 </form>
 
 <script>
-  let guessesLeft = 3;
-  
   const rangeInput = document.getElementById("myRange");
   const sliderValue = document.getElementById("sliderValue");
   const textInput = document.getElementById("inputcountry");
+  const yearInput = document.querySelector(".editable-year");
   const sliderContainer = document.getElementById("sliderContainer");
   const submitButton = document.getElementById("submitButton");
   const guessForm = document.getElementById("guessForm");
-  const guessesLeftSpan = document.getElementById("guessesLeft");
+  const timerDisplay = document.getElementById("timeDisplay");
+  let startTime, intervalTimer;
 
   textInput.addEventListener("input", function() {
     validateInput();
@@ -138,16 +148,43 @@
     sliderValue.textContent = this.value;
   });
 
+  yearInput.addEventListener("input", function() {
+    // Update the slider value when the year input is edited
+    const yearValue = parseInt(this.value);
+    if (!isNaN(yearValue)) {
+      rangeInput.value = yearValue;
+    }
+  });
+
   function validateInput() {
     const inputValue = textInput.value.trim().toLowerCase();
     const isCorrect = inputValue === "czechoslovakia";
     if (isCorrect) {
       textInput.setCustomValidity("");
       showSlider();
+      startTimer();
     } else {
       textInput.setCustomValidity("Incorrect");
       hideSlider();
+      stopTimer();
     }
+  }
+
+  function startTimer() {
+    startTime = new Date().getTime();
+    intervalTimer = setInterval(updateTime, 1000);
+  }
+
+  function stopTimer() {
+    clearInterval(intervalTimer);
+  }
+
+  function updateTime() {
+    const currentTime = new Date().getTime();
+    const elapsedTime = currentTime - startTime;
+    const minutes = Math.floor((elapsedTime % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((elapsedTime % (1000 * 60)) / 1000);
+    timerDisplay.textContent = minutes + ":" + (seconds < 10 ? "0" : "") + seconds;
   }
 
   function showSlider() {
@@ -163,11 +200,16 @@
   guessForm.addEventListener("submit", function(event) {
     event.preventDefault();
     const inputValue = textInput.value.trim().toLowerCase();
-    const isCorrect = inputValue === "czechoslovakia";
-    if (!isCorrect) {
-      guessesLeft--;
-      guessesLeftSpan.textContent = guessesLeft;
+    const isCorrectText = inputValue === "czechoslovakia";
+    const isCorrectSlider = parseInt(rangeInput.value) === 1993;
+    if (isCorrectText && isCorrectSlider) {
+      // Handle correct guess
+      alert("Congratulations! Your guess is correct.");
+    } else {
+      // Handle incorrect guess
+      alert("Sorry, your guess is incorrect. Please try again.");
     }
+    stopTimer();
   });
 </script>
 
