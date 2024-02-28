@@ -125,7 +125,7 @@
     <input type="range" min="-2000" max="1993" value="50" class="slider" id="myRange">
     <input type="text" class="editable-year" value="1993">
   </div>
-  <button id="submitButton" style="display:none;">Finalise guess</button>
+  <button id="submitButton" type="button">Finalise guess</button>
   <div id="timer">Time taken: <span id="timeDisplay">0:00</span></div>
 </form>
 
@@ -158,17 +158,28 @@
 
   function validateInput() {
     const inputValue = textInput.value.trim().toLowerCase();
-    const isCorrect = inputValue === "czechoslovakia";
+    const isCorrect = inputValue === "mongol empire";
     if (isCorrect) {
-      textInput.setCustomValidity("");
-      showSlider();
-      startTimer();
+        textInput.setCustomValidity("");
     } else {
-      textInput.setCustomValidity("Incorrect");
-      hideSlider();
-      stopTimer();
+        textInput.setCustomValidity("Incorrect");
     }
   }
+
+  function showSliderAndSubmit() {
+    const inputValue = textInput.value.trim().toLowerCase();
+    const isCorrect = inputValue === "mongol empire";
+    if (isCorrect) {
+        showSlider();
+        startTimer();
+    }
+  }
+
+  submitButton.addEventListener("click", function(event) {
+    event.preventDefault();
+    showSliderAndSubmit();
+    submitGuess();
+  });
 
   function startTimer() {
     startTime = new Date().getTime();
@@ -189,19 +200,16 @@
 
   function showSlider() {
     sliderContainer.style.display = "flex";
-    submitButton.style.display = "block";
   }
 
   function hideSlider() {
     sliderContainer.style.display = "none";
-    submitButton.style.display = "none";
   }
 
-  guessForm.addEventListener("submit", function(event) {
-    event.preventDefault();
+  function submitGuess() {
     const inputValue = textInput.value.trim().toLowerCase();
     const isCorrectText = inputValue === "mongol empire";
-    const isCorrectSlider = parseInt(rangeInput.value) === 1335;
+    const isCorrectSlider = parseInt(rangeInput.value) === 1353; // Adjusted to the correct value
     if (isCorrectText && isCorrectSlider) {
       // Handle correct guess
       alert("Congratulations! Your guess is correct.");
@@ -210,7 +218,7 @@
       alert("Sorry, your guess is incorrect. Please try again.");
     }
     stopTimer();
-  });
+  }
 </script>
 
 </body>
