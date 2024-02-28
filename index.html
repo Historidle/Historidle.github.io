@@ -101,12 +101,11 @@
       cursor: pointer;
     }
    
-    /* Style for editable year input */
     .editable-year {
       border: none;
       background: none;
       color: inherit;
-      width: 40px; /* Adjust width as needed */
+      width: 40px;
       text-align: center;
     }
 
@@ -149,7 +148,6 @@
   });
 
   yearInput.addEventListener("input", function() {
-    // Update the slider value when the year input is edited
     const yearValue = parseInt(this.value);
     if (!isNaN(yearValue)) {
       rangeInput.value = yearValue;
@@ -209,12 +207,10 @@
   function submitGuess() {
     const inputValue = textInput.value.trim().toLowerCase();
     const isCorrectText = inputValue === "mongol empire";
-    const isCorrectSlider = parseInt(rangeInput.value) === 1353; // Adjusted to the correct value
+    const isCorrectSlider = parseInt(rangeInput.value) === 1353;
     if (isCorrectText && isCorrectSlider) {
-      // Handle correct guess
       alert("Congratulations! Your guess is correct.");
     } else {
-      // Handle incorrect guess
       alert("Sorry, your guess is incorrect. Please try again.");
     }
     stopTimer();
