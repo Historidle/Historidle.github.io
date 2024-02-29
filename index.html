@@ -120,7 +120,7 @@
 <body>
 
 <h1>Historidle</h1>
-<img src="https://raw.githubusercontent.com/Historidle/Historidle.github.io/main/images/mongol%20empire.jpg" width="500" height="300", draggable="false" oncontextmenu="return false;">
+<img src="https://raw.githubusercontent.com/Historidle/Historidle.github.io/main/images/prussia.png" width="500" height="300", draggable="false" oncontextmenu="return false;">
 <form id="guessForm">
   <input type="text" id="inputcountry" name="guess" required>
   <div class="slider-container" id="sliderContainer">
@@ -209,8 +209,8 @@
 
   function submitGuess() {
     const inputValue = textInput.value.trim().toLowerCase();
-    const isCorrectText = inputValue === "mongol empire";
-    const isCorrectSlider = parseInt(rangeInput.value) === 1353;
+    const isCorrectText = inputValue === "prussia";
+    const isCorrectSlider = parseInt(rangeInput.value) === 1947;
     if (isCorrectText && isCorrectSlider) {
       alert("Congratulations! Your guess is correct.");
     } else {
