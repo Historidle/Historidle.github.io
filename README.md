@@ -1,5 +1,5 @@
-Historidle is a daily game where the user aims to guess the historical country based off of a single image. 
+🧐 Historidle is a captivating daily game that challenges users to identify historical countries based on a single image. 🖼️
 
-They have three tries and the goal is to guess the name of and the year in which it collapsed of a country. 
+With just three attempts, players aim to correctly guess the name and the year of collapse of the depicted nation. 📅
 
-Created by two nerds. 🤓
+This engaging game was crafted by two passionate nerds. 🤓
