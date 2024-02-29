@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
   <title>Historidle - Daily game</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
   <style>
     body {
       display: flex;
@@ -14,7 +14,7 @@
       height: 100vh;
       margin: 0;
       background-color: #333;
-      color: #eee;
+      color: #000;
       font-family: 'Montserrat', sans-serif;
     }
 
@@ -22,13 +22,55 @@
       color: #fff;
     }
 
+    .custom_input {
+      display: flex;
+      align-items: center;
+      position: relative;
+      max-width: 100%;
+    }
+
+    .input {
+      font-size: 18px;
+      padding: 4px 7px;
+      width: 100%;
+      outline: none;
+      background: #FFFFFF;
+      color: #000;
+      border: 5px solid #000;
+      border-radius: 0px;
+      transition: .3s ease;
+    }
+
+    .input:focus {
+      background: #F2F2F2;
+      border: 5px solid #000;
+      border-radius: 10px;
+    }
+
+    .input::placeholder {
+      color: #DDDDDD;
+    }
+
     .slider-container {
       display: none;
       align-items: center;
     }
 
+    .slider-container-border {
+      border: 5px solid black;
+      border-radius: 0px;
+    }
+
     .slider-value {
       margin-left: 10px;
+      display: none;
+    }
+
+    .slider-text {
+      cursor: pointer;
+      padding: 0 10px;
+      color: #007bff;
+      display: none;
     }
 
     img {
@@ -65,14 +107,14 @@
 
     button {
       font-family: helvetica;
-      color: #040B14 !important;
+      color: #fff;
       font-size: 23px;
       text-shadow: 0px 0px 0px #FFFFFF;
       box-shadow: 0px 0px 0px #000000;
       padding: 10px 11px;
       border-radius: 0px;
-      border: 2px groove #000000;
-      background: #FFFFFF;
+      border: 2px groove #000;
+      background: #007bff;
     }
 
     input[type="range"] {
@@ -103,7 +145,7 @@
       border-radius: 50%;
       cursor: pointer;
     }
-   
+
     .editable-year {
       border: none;
       background: none;
@@ -115,109 +157,209 @@
     .editable-year:focus {
       outline: none;
     }
+
+    #congratsBox {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      z-index: 999;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .congratsContent {
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 0px;
+      text-align: center;
+      position: relative;
+      border: 5px solid black;
+      max-width: 80%;
+    }
+
+    .closeButton {
+      position: absolute;
+      top: 5px;
+      right: 5px;
+      cursor: pointer;
+      font-size: 24px;
+    }
+
+    .closeButton:hover {
+      color: red;
+    }
+
+    .shareToTwitter {
+      background-color: #007bff;
+      color: #fff;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .shareToTwitter:hover {
+      background-color: #0056b3;
+    }
   </style>
 </head>
 <body>
 
 <h1>Historidle</h1>
-<img src="https://raw.githubusercontent.com/Historidle/Historidle.github.io/main/images/prussia.png" width="500" height="300", draggable="false" oncontextmenu="return false;">
+<img src="https://raw.githubusercontent.com/Historidle/Historidle.github.io/main/images/prussia.png" width="500" height="300" draggable="false" oncontextmenu="return false;">
 <form id="guessForm">
-  <input type="text" id="inputcountry" name="guess" required>
-  <div class="slider-container" id="sliderContainer">
-    <input type="range" min="-2000" max="1993" value="50" class="slider" id="myRange">
-    <input type="text" class="editable-year" value="1993">
+  <div class="custom_input" id="nameGuess">
+    <input type="text" class="input" id="inputcountry" placeholder="Guess the place" autocomplete="off">
   </div>
-  <button id="submitButton" type="button">Finalise guess</button>
+  <div class="slider-container" id="sliderContainer" style="display: none;">
+    <div class="slider-container-border">
+      <input type="range" min="-2000" max="1993" value="0" class="slider" id="myRange">
+    </div>
+    <input type="text" class="editable-year" id="yearText" style="display: block;" value="0">
+  </div>
+  <button id="submitButton" type="button">Finish guess</button>
   <div id="timer">Time taken: <span id="timeDisplay">0:00</span></div>
+  <div id="guessFeedback"></div>
 </form>
 
-<script>
-  const rangeInput = document.getElementById("myRange");
-  const sliderValue = document.getElementById("sliderValue");
-  const textInput = document.getElementById("inputcountry");
-  const yearInput = document.querySelector(".editable-year");
-  const sliderContainer = document.getElementById("sliderContainer");
-  const submitButton = document.getElementById("submitButton");
-  const guessForm = document.getElementById("guessForm");
-  const timerDisplay = document.getElementById("timeDisplay");
-  let startTime, intervalTimer;
+<div id="congratsBox">
+  <div class="congratsContent">
+    <span class="closeButton" onclick="closeCongratsBox()">&times;</span>
+    <h2>Congratulations!</h2>
+    <p>You finished with a time of <span id="finishTime"></span></p>
+    <p>Average time taken: <span id="averageTime"></span></p>
+    <div class="shareToTwitter">Share to Twitter</div>
+  </div>
+</div>
 
-  textInput.addEventListener("input", function() {
+<script>
+  // Define variables for the timer
+  let startTime;
+  let timerInterval;
+  let elapsedTime;
+
+  // Define variables for storing time data
+  let totalElapsedTime = 0;
+  let attemptsCount = 0;
+
+  // Load average time taken from localStorage if available
+  const storedTotalElapsedTime = parseInt(localStorage.getItem("totalElapsedTime"));
+  const storedAttemptsCount = parseInt(localStorage.getItem("attemptsCount"));
+  if (!isNaN(storedTotalElapsedTime) && !isNaN(storedAttemptsCount)) {
+    totalElapsedTime = storedTotalElapsedTime;
+    attemptsCount = storedAttemptsCount;
+  }
+
+  // Function to start the timer
+  function startTimer() {
+    startTime = Date.now();
+    timerInterval = setInterval(updateTimer, 1000);
+  }
+
+  // Function to update the timer display
+  function updateTimer() {
+    const currentTime = Date.now();
+    elapsedTime = currentTime - startTime;
+    const minutes = Math.floor(elapsedTime / 60000);
+    const seconds = Math.floor((elapsedTime % 60000) / 1000);
+    document.getElementById("timeDisplay").textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+  }
+
+  // Function to stop the timer
+  function stopTimer() {
+    clearInterval(timerInterval);
+  }
+
+  // Function to calculate and display average time
+  function calculateAverageTime() {
+    totalElapsedTime += elapsedTime;
+    attemptsCount++;
+    const averageElapsedTime = totalElapsedTime / attemptsCount;
+    const averageMinutes = Math.floor(averageElapsedTime / 60000);
+    const averageSeconds = Math.floor((averageElapsedTime % 60000) / 1000);
+    document.getElementById("averageTime").textContent = `${averageMinutes}:${averageSeconds < 10 ? '0' : ''}${averageSeconds}`;
+  }
+
+  // Define variables for HTML elements
+  const inputCountry = document.getElementById("inputcountry");
+  const sliderContainer = document.getElementById("sliderContainer");
+  const yearText = document.getElementById("yearText");
+  const slider = document.getElementById("myRange");
+  const submitButton = document.getElementById("submitButton");
+  const guessFeedback = document.getElementById("guessFeedback");
+  const congratsBox = document.getElementById("congratsBox");
+  const shareToTwitterButton = document.querySelector(".shareToTwitter");
+
+  // Add event listeners
+  inputCountry.addEventListener("input", function() {
     validateInput();
   });
 
-  rangeInput.addEventListener("input", function() {
-    sliderValue.textContent = this.value;
-  });
-
-  yearInput.addEventListener("input", function() {
-    const yearValue = parseInt(this.value);
-    if (!isNaN(yearValue)) {
-      rangeInput.value = yearValue;
-    }
-  });
-
-  function validateInput() {
-    const inputValue = textInput.value.trim().toLowerCase();
-    const isCorrect = inputValue === "mongol empire";
-    if (isCorrect) {
-        textInput.setCustomValidity("");
-    } else {
-        textInput.setCustomValidity("Incorrect");
-    }
-  }
-
-  function showSliderAndSubmit() {
-    const inputValue = textInput.value.trim().toLowerCase();
-    const isCorrect = inputValue === "prussia";
-    if (isCorrect) {
-        showSlider();
-        startTimer();
-    }
-  }
-
-  submitButton.addEventListener("click", function(event) {
-    event.preventDefault();
-    showSliderAndSubmit();
+  submitButton.addEventListener("click", function() {
     submitGuess();
   });
 
-  function startTimer() {
-    startTime = new Date().getTime();
-    intervalTimer = setInterval(updateTime, 1000);
-  }
+  slider.addEventListener("input", function() {
+    updateSliderValue();
+  });
 
-  function stopTimer() {
-    clearInterval(intervalTimer);
-  }
-
-  function updateTime() {
-    const currentTime = new Date().getTime();
-    const elapsedTime = currentTime - startTime;
-    const minutes = Math.floor((elapsedTime % (1000 * 60 * 60)) / (1000 * 60));
-    const seconds = Math.floor((elapsedTime % (1000 * 60)) / 1000);
-    timerDisplay.textContent = minutes + ":" + (seconds < 10 ? "0" : "") + seconds;
-  }
-
-  function showSlider() {
-    sliderContainer.style.display = "flex";
-  }
-
-  function hideSlider() {
-    sliderContainer.style.display = "none";
-  }
-
-  function submitGuess() {
-    const inputValue = textInput.value.trim().toLowerCase();
-    const isCorrectText = inputValue === "prussia";
-    const isCorrectSlider = parseInt(rangeInput.value) === 1871;
-    if (isCorrectText && isCorrectSlider) {
-      alert("Congratulations! Your guess is correct.");
-    } else {
-      alert("Sorry, your guess is incorrect. Please try again.");
+  // Function to validate the user input
+  function validateInput() {
+    const inputValue = inputCountry.value.trim().toLowerCase();
+    const isCorrect = inputValue === "prussia"; // Change the correct answer here
+    if (isCorrect) {
+      inputCountry.disabled = true;
+      sliderContainer.style.display = "flex";
+      yearText.style.display = "block";
+      startTimer();
     }
-    stopTimer();
   }
+
+  // Function to handle submitting the guess
+  function submitGuess() {
+    const guessedYear = parseInt(yearText.value);
+    if (guessedYear === 1871) { // Change the correct year here
+      stopTimer();
+      calculateAverageTime();
+      showCongratsBox();
+      localStorage.setItem("totalElapsedTime", totalElapsedTime);
+      localStorage.setItem("attemptsCount", attemptsCount);
+      submitButton.disabled = true;
+    } else {
+      guessFeedback.textContent = "Wrong answer";
+      setTimeout(function() {
+        guessFeedback.textContent = "";
+      }, 1000);
+    }
+  }
+
+  // Function to update the slider value based on the year text
+  function updateSliderValue() {
+    yearText.value = slider.value;
+  }
+
+  // Function to display the congratulations box
+  function showCongratsBox() {
+    congratsBox.style.display = "flex";
+  }
+
+  // Function to close the congratulations box
+  function closeCongratsBox() {
+    congratsBox.style.display = "none";
+  }
+
+  // Function to share to Twitter
+  function shareToTwitter() {
+    const historidleURL = "https://historidle.github.io";
+    const tweetText = `I just completed Historidle in ${document.getElementById("timeDisplay").textContent}! Try at: ${historidleURL}`;
+    const tweetURL = `https://twitter.com/intent/tweet?text=${encodeURIComponent(tweetText)}`;
+    window.open(tweetURL, "_blank");
+  }
+
+  shareToTwitterButton.addEventListener("click", shareToTwitter);
 </script>
 
 </body>
