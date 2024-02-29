@@ -193,15 +193,16 @@
       color: red;
     }
 
-    .shareToTwitter {
+    .shareToTwitter, .shareToReddit, .shareToFacebook {
       background-color: #007bff;
       color: #fff;
       padding: 10px 20px;
       border-radius: 5px;
       cursor: pointer;
+      margin-top: 10px;
     }
 
-    .shareToTwitter:hover {
+    .shareToTwitter:hover, .shareToReddit:hover, .shareToFacebook:hover {
       background-color: #0056b3;
     }
   </style>
@@ -232,8 +233,12 @@
     <p>You finished with a time of <span id="finishTime"></span></p>
     <p>Average time taken: <span id="averageTime"></span></p>
     <div class="shareToTwitter">Share to Twitter</div>
+    <div class="shareToReddit">Share to Reddit</div>
+    <div class="shareToFacebook">Share to Facebook</div>
   </div>
 </div>
+
+<div id="graphContainer"></div>
 
 <script>
   // Define variables for the timer
@@ -292,6 +297,8 @@
   const guessFeedback = document.getElementById("guessFeedback");
   const congratsBox = document.getElementById("congratsBox");
   const shareToTwitterButton = document.querySelector(".shareToTwitter");
+  const shareToRedditButton = document.querySelector(".shareToReddit");
+  const shareToFacebookButton = document.querySelector(".shareToFacebook");
 
   // Add event listeners
   inputCountry.addEventListener("input", function() {
@@ -356,10 +363,35 @@
     const historidleURL = "https://historidle.github.io";
     const tweetText = `I just completed Historidle in ${document.getElementById("timeDisplay").textContent}! Try at: ${historidleURL}`;
     const tweetURL = `https://twitter.com/intent/tweet?text=${encodeURIComponent(tweetText)}`;
+
+    // Open Twitter intent in a new tab
     window.open(tweetURL, "_blank");
   }
 
   shareToTwitterButton.addEventListener("click", shareToTwitter);
+
+  // Function to share to Reddit
+  function shareToReddit() {
+    const historidleURL = "https://historidle.github.io";
+    const redditText = `I just completed Historidle in ${document.getElementById("timeDisplay").textContent}! Try at: ${historidleURL}`;
+    const redditURL = `https://www.reddit.com/submit?url=${encodeURIComponent(historidleURL)}&title=${encodeURIComponent(redditText)}`;
+
+    // Open Reddit share page in a new tab
+    window.open(redditURL, "_blank");
+  }
+
+  shareToRedditButton.addEventListener("click", shareToReddit);
+
+  // Function to share to Facebook
+  function shareToFacebook() {
+    const historidleURL = "https://historidle.github.io";
+    const facebookURL = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(historidleURL)}`;
+
+    // Open Facebook share page in a new tab
+    window.open(facebookURL, "_blank");
+  }
+
+  shareToFacebookButton.addEventListener("click", shareToFacebook);
 </script>
 
 </body>
