@@ -169,7 +169,7 @@
 
   function showSliderAndSubmit() {
     const inputValue = textInput.value.trim().toLowerCase();
-    const isCorrect = inputValue === "mongol empire";
+    const isCorrect = inputValue === "prussia";
     if (isCorrect) {
         showSlider();
         startTimer();
@@ -210,7 +210,7 @@
   function submitGuess() {
     const inputValue = textInput.value.trim().toLowerCase();
     const isCorrectText = inputValue === "prussia";
-    const isCorrectSlider = parseInt(rangeInput.value) === 1947;
+    const isCorrectSlider = parseInt(rangeInput.value) === 1871;
     if (isCorrectText && isCorrectSlider) {
       alert("Congratulations! Your guess is correct.");
     } else {
