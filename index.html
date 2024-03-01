@@ -210,16 +210,15 @@
 <body>
 
 <h1>Historidle</h1>
-<img src="https://raw.githubusercontent.com/Historidle/Historidle.github.io/main/images/prussia.png" width="500" height="300" draggable="false" oncontextmenu="return false;">
+<img src="https://raw.githubusercontent.com/Historidle/Historidle.github.io/main/images/confederate%20states%20of%20america.jpg" width="500" height="300" draggable="false" oncontextmenu="return false;">
 <form id="guessForm">
   <div class="custom_input" id="nameGuess">
-    <input type="text" class="input" id="inputcountry" placeholder="Guess the place" autocomplete="off">
+    <input type="text" class="input" id="inputcountry" placeholder="Type Here..." autocomplete="off">
   </div>
   <div class="slider-container" id="sliderContainer" style="display: none;">
     <div class="slider-container-border">
-      <input type="range" min="-2000" max="1993" value="0" class="slider" id="myRange">
-    </div>
-    <input type="text" class="editable-year" id="yearText" style="display: block;" value="0">
+      <input type="range" min="-2000" max="2000" value="0" class="slider" id="/div>
+    <input type="text" class="editable-year" id="yearText" style="display: block;" value="1865">
   </div>
   <button id="submitButton" type="button">Finish guess</button>
   <div id="timer">Time taken: <span id="timeDisplay">0:00</span></div>
@@ -241,16 +240,12 @@
 <div id="graphContainer"></div>
 
 <script>
-  // Define variables for the timer
   let startTime;
   let timerInterval;
   let elapsedTime;
-
-  // Define variables for storing time data
   let totalElapsedTime = 0;
   let attemptsCount = 0;
 
-  // Load average time taken from localStorage if available
   const storedTotalElapsedTime = parseInt(localStorage.getItem("totalElapsedTime"));
   const storedAttemptsCount = parseInt(localStorage.getItem("attemptsCount"));
   if (!isNaN(storedTotalElapsedTime) && !isNaN(storedAttemptsCount)) {
@@ -258,13 +253,11 @@
     attemptsCount = storedAttemptsCount;
   }
 
-  // Function to start the timer
   function startTimer() {
     startTime = Date.now();
     timerInterval = setInterval(updateTimer, 1000);
   }
 
-  // Function to update the timer display
   function updateTimer() {
     const currentTime = Date.now();
     elapsedTime = currentTime - startTime;
@@ -273,12 +266,10 @@
     document.getElementById("timeDisplay").textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
   }
 
-  // Function to stop the timer
   function stopTimer() {
     clearInterval(timerInterval);
   }
 
-  // Function to calculate and display average time
   function calculateAverageTime() {
     totalElapsedTime += elapsedTime;
     attemptsCount++;
@@ -288,7 +279,6 @@
     document.getElementById("averageTime").textContent = `${averageMinutes}:${averageSeconds < 10 ? '0' : ''}${averageSeconds}`;
   }
 
-  // Define variables for HTML elements
   const inputCountry = document.getElementById("inputcountry");
   const sliderContainer = document.getElementById("sliderContainer");
   const yearText = document.getElementById("yearText");
@@ -300,7 +290,6 @@
   const shareToRedditButton = document.querySelector(".shareToReddit");
   const shareToFacebookButton = document.querySelector(".shareToFacebook");
 
-  // Add event listeners
   inputCountry.addEventListener("input", function() {
     validateInput();
   });
@@ -313,10 +302,9 @@
     updateSliderValue();
   });
 
-  // Function to validate the user input
   function validateInput() {
     const inputValue = inputCountry.value.trim().toLowerCase();
-    const isCorrect = inputValue === "prussia"; // Change the correct answer here
+    const isCorrect = inputValue === "confederate states of america";
     if (isCorrect) {
       inputCountry.disabled = true;
       sliderContainer.style.display = "flex";
@@ -325,10 +313,9 @@
     }
   }
 
-  // Function to handle submitting the guess
   function submitGuess() {
     const guessedYear = parseInt(yearText.value);
-    if (guessedYear === 1871) { // Change the correct year here
+    if (guessedYear === 1865) {
       stopTimer();
       calculateAverageTime();
       showCongratsBox();
@@ -343,51 +330,39 @@
     }
   }
 
-  // Function to update the slider value based on the year text
   function updateSliderValue() {
     yearText.value = slider.value;
   }
 
-  // Function to display the congratulations box
   function showCongratsBox() {
     congratsBox.style.display = "flex";
   }
 
-  // Function to close the congratulations box
   function closeCongratsBox() {
     congratsBox.style.display = "none";
   }
 
-  // Function to share to Twitter
   function shareToTwitter() {
     const historidleURL = "https://historidle.github.io";
     const tweetText = `I just completed Historidle in ${document.getElementById("timeDisplay").textContent}! Try at: ${historidleURL}`;
     const tweetURL = `https://twitter.com/intent/tweet?text=${encodeURIComponent(tweetText)}`;
-
-    // Open Twitter intent in a new tab
     window.open(tweetURL, "_blank");
   }
 
   shareToTwitterButton.addEventListener("click", shareToTwitter);
 
-  // Function to share to Reddit
   function shareToReddit() {
     const historidleURL = "https://historidle.github.io";
     const redditText = `I just completed Historidle in ${document.getElementById("timeDisplay").textContent}! Try at: ${historidleURL}`;
     const redditURL = `https://www.reddit.com/submit?url=${encodeURIComponent(historidleURL)}&title=${encodeURIComponent(redditText)}`;
-
-    // Open Reddit share page in a new tab
     window.open(redditURL, "_blank");
   }
 
   shareToRedditButton.addEventListener("click", shareToReddit);
 
-  // Function to share to Facebook
   function shareToFacebook() {
     const historidleURL = "https://historidle.github.io";
     const facebookURL = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(historidleURL)}`;
-
-    // Open Facebook share page in a new tab
     window.open(facebookURL, "_blank");
   }
 
