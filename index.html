@@ -152,6 +152,7 @@
       color: inherit;
       width: 40px;
       text-align: center;
+      display: block;
     }
 
     .editable-year:focus {
@@ -213,12 +214,13 @@
 <img src="https://raw.githubusercontent.com/Historidle/Historidle.github.io/main/images/confederate%20states%20of%20america.jpg" width="500" height="300" draggable="false" oncontextmenu="return false;">
 <form id="guessForm">
   <div class="custom_input" id="nameGuess">
-    <input type="text" class="input" id="inputcountry" placeholder="Type Here..." autocomplete="off">
+    <input type="text" class="input" id="inputcountry" placeholder="Confederate States of America" autocomplete="off">
   </div>
   <div class="slider-container" id="sliderContainer" style="display: none;">
     <div class="slider-container-border">
-      <input type="range" min="-2000" max="2000" value="0" class="slider" id="/div>
-    <input type="text" class="editable-year" id="yearText" style="display: block;" value="1865">
+      <input type="range" min="-2000" max="1993" value="0" class="slider" id="myRange">
+    </div>
+    <input type="text" class="editable-year" id="yearText" style="display: block;" placeholder="Text Here…" value="0">
   </div>
   <button id="submitButton" type="button">Finish guess</button>
   <div id="timer">Time taken: <span id="timeDisplay">0:00</span></div>
@@ -300,6 +302,12 @@
 
   slider.addEventListener("input", function() {
     updateSliderValue();
+  });
+
+  // Add an event listener to the editable text input field
+  yearText.addEventListener("input", function() {
+    // Update the slider value to match the value of the editable text
+    slider.value = yearText.value;
   });
 
   function validateInput() {
