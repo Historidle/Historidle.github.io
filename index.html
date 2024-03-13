@@ -212,7 +212,7 @@
 <body>
 
 <h1>Historidle</h1>
-<img src="https://raw.githubusercontent.com/Historidle/Historidle.github.io/main/images/Kingdom%20of%20Axum.JPG" width="500" height="300" draggable="false" oncontextmenu="return false;">
+<img src="https://raw.githubusercontent.com/Historidle/Historidle.github.io/main/images/0DEED476-72B9-48D0-A13F-7C53FACAA895.jpeg" width="500" height="300" draggable="false" oncontextmenu="return false;">
 <form id="guessForm">
   <div class="custom_input" id="nameGuess">
     <input type="text" class="input" id="inputcountry" placeholder="Text Here..." autocomplete="off">
@@ -313,7 +313,7 @@
 
   function validateInput() {
     const inputValue = inputCountry.value.trim().toLowerCase();
-    const isCorrect = inputValue === "kingdom of axum";
+    const isCorrect = inputValue === "sultanate of zanzibar";
     if (isCorrect) {
       inputCountry.disabled = true;
       sliderContainer.style.display = "flex";
@@ -324,7 +324,7 @@
 
   function submitGuess() {
     const guessedYear = parseInt(yearText.value);
-    if (guessedYear === 960) {
+    if (guessedYear === 1964) {
       stopTimer();
       calculateAverageTime();
       showCongratsBox();
