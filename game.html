@@ -1,3 +1,47 @@
-<title>Historidle - Daily game</title>
-coming soon
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Historidle - Daily game</title>
+  <link rel="icon" href="Icon.ico">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
 
+<h1>Historidle</h1>
+<img src="https://raw.githubusercontent.com/Historidle/Historidle.github.io/main/images/burgundy.jpg" width="500" height="300" draggable="false" oncontextmenu="return false;">
+<form id="guessForm">
+  <div class="custom_input" id="nameGuess">
+    <input type="text" class="input" id="inputcountry" placeholder="Text Here..." autocomplete="off">
+  </div>
+  <div class="slider-container" id="sliderContainer" style="display: none;">
+    <div class="slider-container-border">
+      <input type="range" min="-2000" max="1993" value="0" class="slider" id="myRange">
+    </div>
+    <input type="text" class="editable-year" id="yearText" style="display: block;" placeholder="0" value="0">
+  </div>
+  <button id="submitButton" type="button">Finish guess</button>
+  <div id="timer">Time taken: <span id="timeDisplay">0:00</span></div>
+  <div id="guessFeedback"></div>
+</form>
+
+<div id="congratsBox">
+  <div class="congratsContent">
+    <span class="closeButton" onclick="closeCongratsBox()">&times;</span>
+    <h2>Congratulations!</h2>
+    <p>You finished with a time of <span id="finishTime"></span></p>
+    <p>Average time taken: <span id="averageTime"></span></p>
+    <div class="shareToTwitter">Share to Twitter</div>
+    <div class="shareToReddit">Share to Reddit</div>
+    <div class="shareToFacebook">Share to Facebook</div>
+  </div>
+</div>
+
+<div id="graphContainer"></div>
+
+<script src="scripts/script.js"></script>
+
+</body>
+</html>
